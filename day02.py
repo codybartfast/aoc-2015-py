@@ -12,8 +12,13 @@ def part1(data):
     return sum(map(wrapping, data))
 
 
+def ribbon(dimensions):
+    d1, d2, d3 = sorted(dimensions)
+    return 2 * (d1 + d2) + (d1 * d2 * d3)
+
+
 def part2(data, ans1):
-    return "ans2"
+    return sum(map(ribbon, data))
 
 
 def jingle(filename=None, filepath=None, input=None):
