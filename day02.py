@@ -8,13 +8,13 @@ def wrapping(dimensions):
     return s1 + 2 * (s1 + s2 + s3)
 
 
-def part1(data):
-    return sum(map(wrapping, data))
-
-
 def ribbon(dimensions):
     d1, d2, d3 = sorted(dimensions)
     return 2 * (d1 + d2) + (d1 * d2 * d3)
+
+
+def part1(data):
+    return sum(map(wrapping, data))
 
 
 def part2(data, ans1):
