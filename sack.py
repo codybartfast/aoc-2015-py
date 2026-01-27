@@ -18,7 +18,7 @@ def read_input(input_filename = None):
     input_path = input_path / f"day{day}" / f"{input_filename}"
     with open(input_path, encoding="utf-8") as f:
          input = f.read()
-    return input 
+    return input.rstrip("\n") 
 
 
 def present(solver_action, title=None):
