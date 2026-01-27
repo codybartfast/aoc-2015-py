@@ -3,7 +3,7 @@ def parse(input):
 
 
 def part1(data):
-    print(f"{data}\n")
+    print(f"{data}\n\n")
     return "ans1"
 
 
