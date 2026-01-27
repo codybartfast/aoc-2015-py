@@ -17,7 +17,7 @@ def part1(data):
     return sum(map(wrapping, data))
 
 
-def part2(data, ans1):
+def part2(data, ans1=None):
     return sum(map(ribbon, data))
 
 

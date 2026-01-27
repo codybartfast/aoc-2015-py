@@ -19,7 +19,7 @@ def part1(directions):
     return len(set(route(directions)))
 
 
-def part2(directions, ans1):
+def part2(directions, ans1=None):
     santa = route(directions[::2])
     robo_santa = route(directions[1::2])
     visited = set(santa)

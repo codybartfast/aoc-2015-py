@@ -7,7 +7,7 @@ def part1(data):
     return "ans1"
 
 
-def part2(data, ans1):
+def part2(data, ans1=None):
     return "ans2"
 
 

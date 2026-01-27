@@ -13,7 +13,7 @@ def part1(data):
     return list(apply(data))[-1]
 
 
-def part2(data, ans1):
+def part2(data, ans1=None):
     return list(apply(data)).index(-1) + 1
 
 
