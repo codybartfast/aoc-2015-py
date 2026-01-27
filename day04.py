@@ -13,10 +13,9 @@ def md5(key, number):
 def search(key, nzero):
     zero_str = "0" * nzero
     n = 0
-    while True:
-        if md5(key, n).startswith(zero_str):
-            return n
+    while not md5(key, n).startswith(zero_str):
         n += 1
+    return n
 
 
 def part1(key):
