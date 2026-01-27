@@ -2,13 +2,16 @@ def parse(input):
     return input
 
 
+
 def bells(input):
     data = parse(input)
     print(data, "\n")
 
     yield data
 
-    yield None
+    open_parens = sum(1 for char in data if char == "(")
+
+    yield open_parens - (len(data) - open_parens)
 
     yield None
 
