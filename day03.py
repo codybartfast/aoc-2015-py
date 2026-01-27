@@ -28,8 +28,12 @@ def part1(directions):
     return len(set(route(directions)))
 
 
-def part2(data, ans1):
-    return "ans2"
+def part2(directions, ans1):
+    santa = route(directions[::2])
+    robo_santa = route(directions[1::2])
+    visited = set(santa)
+    visited.update(robo_santa)
+    return len(visited)
 
 
 def jingle(filename=None, filepath=None, input=None):
