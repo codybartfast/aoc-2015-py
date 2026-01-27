@@ -10,21 +10,21 @@ def md5(key, number):
     return hashlib.md5(text.encode("ascii")).hexdigest()
 
 
-def search(key):
+def search(key, nzero):
+    zero_str = "0" * nzero
     n = 0
     while True:
-        hash = md5(key, n)
-        if hash[0:5] == "00000":
+        if md5(key, n).startswith(zero_str):
             return n
         n += 1
 
 
 def part1(key):
-    return search(key)
+    return search(key, 5)
 
 
-def part2(data, ans1=None):
-    return "ans2"
+def part2(key, ans1=None):
+    return search(key, 6)
 
 
 def jingle(filename=None, filepath=None, input=None):
