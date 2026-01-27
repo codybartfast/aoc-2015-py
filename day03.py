@@ -2,29 +2,20 @@ def parse(input):
     return input
 
 
-def next_house(house, dir):
-    x, y = house
-    match dir:
-        case "^":
-            return x, y - 1
-        case ">":
-            return x + 1, y
-        case "v":
-            return x, y + 1
-        case "<":
-            return x - 1, y
-    assert False
+dir_deltas = {"^": (0, -1), ">": (1, 0), "v": (0, 1), "<": (-1, 0)}
 
 
 def route(directions):
-    house = 0,0
-    yield house
+    x, y = 0, 0
+    yield x, y
     for dir in directions:
-        yield (house := next_house(house, dir))
-    
+        dx, dy = dir_deltas[dir]
+        x += dx
+        y += dy
+        yield x, y
+
 
 def part1(directions):
-    print(f"{directions}\n\n")
     return len(set(route(directions)))
 
 
