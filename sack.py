@@ -1,6 +1,8 @@
 from pathlib import Path
 import sys
 
+YEAR="2015"
+
 def _day():
     filepath = sys._getframe(2).f_code.co_filename
     day = filepath[-5:-3]
@@ -12,7 +14,7 @@ def read_input(input_filename = None):
     if "." not in input_filename:
         input_filename += ".txt"
     day = _day()
-    input_path = Path(__file__).resolve().parent / "input" / "2025"
+    input_path = Path(__file__).resolve().parent / "input" / YEAR
     input_path = input_path / f"day{day}" / f"{input_filename}"
     with open(input_path, encoding="utf-8") as f:
          input = f.read()
