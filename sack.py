@@ -1,52 +1,54 @@
 from pathlib import Path
 import sys
 
-YEAR="2015"
+YEAR = "2015"
+
 
 def _day():
     filepath = sys._getframe(2).f_code.co_filename
     day = filepath[-5:-3]
     return day
- 
-def read_input(input_filename = None):
-    if input_filename is None:
-        input_filename = "input"    
-    if "." not in input_filename:
-        input_filename += ".txt"
-    day = _day()
-    input_path = Path(__file__).resolve().parent / "input" / YEAR
-    input_path = input_path / f"day{day}" / f"{input_filename}"
-    with open(input_path, encoding="utf-8") as f:
-         input = f.read()
-    return input.rstrip("\n") 
 
 
-def present(solver_action, title=None):
+def read_input(filename=None, filepath=None):
+    if not filepath:
+        if filename is None:
+            filename = "input"
+        if "." not in filename:
+            filename += ".txt"
+        day = _day()
+        filepath = Path(__file__).resolve().parent / "input" / YEAR
+        filepath = filepath / f"day{day}" / f"{filename}"
+    with open(filepath, encoding="utf-8") as f:
+        input = f.read()
+    return input.rstrip("\n")
+
+
+def present(input, parse, part1, part2):
     import time
+
     pc_start = time.perf_counter()
     day = _day()
 
-    if title is None:
-        title = f"Day {day}"
+    title = f"Day {day}"
 
     print()
     print(title)
     print("=" * len(title))
     print()
 
-    solve_it=solver_action()
-    
+
     pc_parse_before = time.perf_counter()
-    next(solve_it)
+    data = parse(input)
     pc_parse_after = time.perf_counter()
-    
+
     pc_part1_before = time.perf_counter()
-    ans1 = next(solve_it)
+    ans1 = part1(data)
     pc_part1_after = time.perf_counter()
     print(f"Part 1: {ans1}")
 
     pc_part2_before = time.perf_counter()
-    ans2 = next(solve_it)
+    ans2 = part2(data, ans1)
     pc_part2_after = time.perf_counter()
     print(f"Part 2: {ans2}")
 
@@ -60,4 +62,3 @@ def present(solver_action, title=None):
     print(f" Part 2: {pc_part2_after - pc_part2_before:12.6f}")
     print(f"Elapsed: {pc_stop - pc_start:12.6f}")
     print()
-     
