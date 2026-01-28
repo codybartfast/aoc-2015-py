@@ -1,9 +1,12 @@
+import re
+
+
 def parse(input):
     return input.splitlines()
 
 
 def is_nice(string):
-    prev = ""
+    prev = "\n"
     vowels = 0
     has_double = False
     for char in string:
@@ -11,10 +14,18 @@ def is_nice(string):
             vowels += 1
         if char == prev:
             has_double = True
-        if prev + char in ["ab", "cd", "pq", "xy"]:
+        if (idx := "acpx".find(prev)) >= 0 and "bdqy"[idx] == char:
             return False
         prev = char
     return vowels >= 3 and has_double
+
+
+repeated_pair_rx = re.compile(r"(..).*\1")
+split_pair_rx = re.compile(r"(.).\1")
+
+
+def is_nicer(string):
+    return bool(repeated_pair_rx.search(string)) and bool(split_pair_rx.search(string))
 
 
 def part1(strings):
@@ -22,7 +33,7 @@ def part1(strings):
 
 
 def part2(strings, ans1=None):
-    return "ans2"
+    return sum(is_nicer(string) for string in strings)
 
 
 def jingle(filename=None, filepath=None, input=None):
