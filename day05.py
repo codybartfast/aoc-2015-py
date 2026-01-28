@@ -6,7 +6,7 @@ def parse(input):
 
 
 def is_nice(string):
-    prev = "\n"
+    prev = "\0"
     vowels = 0
     has_double = False
     for char in string:
