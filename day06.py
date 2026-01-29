@@ -9,42 +9,33 @@ def parse(input):
     ]
 
 
-def make_lights(size = 1000):
-    return [[False] * size for _ in range(size)]
-
-def turn_on(n):
-    return True
-
-def turn_off(n):
-    return False
-
-def toggle(n):
-    return not n
-
-def apply(instruction, lights):
+def apply(instruction, lights, turn_on, turn_off, toggle):
     (op, (x1, y1), (x2, y2)) = instruction
     match op:
         case "on":
-            set = turn_on
+            adjust = turn_on
         case "off":
-            set = turn_off
+            adjust = turn_off
         case "toggle":
-            set = toggle
+            adjust = toggle
     for y in range(y1, y2 + 1):
         row = lights[y]
         for x in range(x1, x2 + 1):
-            row[x] = set(row[x])
-    
-    
+            row[x] = adjust(row[x])
+
+
 def part1(instructions):
-    lights = make_lights()
+    lights = [[0] * 1000 for _ in range(1000)]
     for instr in instructions:
-        apply(instr, lights)
+        apply(instr, lights, lambda n: 1, lambda n: 0, lambda n: not n)
     return sum(sum(row) for row in lights)
 
 
 def part2(instructions, ans1=None):
-    return "ans2"
+    lights = [[0] * 1000 for _ in range(1000)]
+    for instr in instructions:
+        apply(instr, lights, lambda n: n + 1, lambda n: max(0, n - 1), lambda n: n + 2)
+    return sum(sum(row) for row in lights)
 
 
 def jingle(filename=None, filepath=None, input=None):
