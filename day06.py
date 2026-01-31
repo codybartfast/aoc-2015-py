@@ -38,6 +38,19 @@ def part2(instructions, ans1=None):
     return sum(sum(row) for row in lights)
 
 
+# Perf Notes
+# ==========
+#
+# Having a func call like 'adjust' was about twice as fast as having the match/branch in
+# the hot loop.
+#
+# Having the dedicated functions include the full loop for each adjustment (so there's no
+# branching and no additionaal function call in the loop) is about twice the speed of this.
+#
+# Using a bitmask soln for Part 1 was about 100 times faster than this.
+#
+
+
 def jingle(filename=None, filepath=None, input=None):
     import sack
 
