@@ -19,7 +19,7 @@ def memo(cicuit):
     return get
 
 
-def wire_circuit(wire_info):
+def wire_circuit(wire_info, b_val=-1):
     circuit = {}
     memo_get = memo(circuit)
 
@@ -31,6 +31,10 @@ def wire_circuit(wire_info):
             return lambda id=txt: memo_get(id)
 
     for [parts, wire] in wire_info:
+        if wire == "b" and b_val >= 0:
+            circuit["b"] = lambda: b_val
+            continue
+
         if len(parts) == 1:
             txt = parts[0]
             circuit[wire] = val_getter(txt)
@@ -63,9 +67,9 @@ def part1(wire_info):
     return circuit["a"]()
 
 
-
-def part2(data, ans1=None):
-    return "ans2"
+def part2(wire_info, ans1=None):
+    circuit = wire_circuit(wire_info, ans1)
+    return circuit["a"]()
 
 
 def jingle(filename=None, filepath=None, input=None):
