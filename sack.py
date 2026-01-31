@@ -32,7 +32,7 @@ def present(input, parse, part1, part2):
 
     title = f"Day {day}"
 
-    print()
+    print("\n")
     print(title)
     print("=" * len(title))
     print()
