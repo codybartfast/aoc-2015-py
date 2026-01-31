@@ -1,6 +1,3 @@
-MAX_INT = 1 << 16
-
-
 class Gate:
     def __init__(self, board, op, args):
         self.board = board
@@ -14,13 +11,23 @@ class Gate:
         return self.board[operand].value()
 
     def calc(self):
-        vals = tuple(map(self.lookup, self.args))
+        vals = map(self.lookup, self.args)
         return self.op(*vals)
 
     def value(self):
         if not self._value:
             self._value = self.calc()
         return self._value
+
+
+ops = {
+    "ID": lambda a: a,
+    "NOT": lambda a: ~a,
+    "AND": lambda a, b: a & b,
+    "OR": lambda a, b: a | b,
+    "LSHIFT": lambda a, b: a << b,
+    "RSHIFT": lambda a, b: a >> b,
+}
 
 
 def parse(input):
@@ -30,34 +37,16 @@ def parse(input):
     ]
 
 
-ops = {
-    "ID": lambda a: a,
-    "NOT": lambda a: (~a) % MAX_INT,
-    "AND": lambda a, b: (a & b) % MAX_INT,
-    "OR": lambda a, b: (a | b) % MAX_INT,
-    "LSHIFT": lambda a, b: (a << b) % MAX_INT,
-    "RSHIFT": lambda a, b: (a >> b) % MAX_INT,
-}
-
-
 def wire_board(wire_info, b_val=-1):
     board = {}
-
     for [parts, wire] in wire_info:
-        if wire == "b" and b_val >= 0:
-            board["b"] = Gate(board, ops["ID"], (str(b_val),))
-            continue
-
         if len(parts) == 1:
-            txt = parts[0]
-            board[wire] = Gate(board, ops["ID"], (txt,))
+            board[wire] = Gate(board, ops["ID"], (parts[0],))
         elif len(parts) == 2:
-            a = parts[1]
-            board[wire] = Gate(board, ops["NOT"], (a,))
+            board[wire] = Gate(board, ops["NOT"], (parts[1],))
         else:
             [a, op, b] = parts
             board[wire] = Gate(board, ops[op], (a, b))
-
     return board
 
 
@@ -68,6 +57,7 @@ def part1(wire_info):
 
 def part2(wire_info, ans1=None):
     board = wire_board(wire_info, ans1)
+    board["b"] = Gate(board, ops["ID"], (str(ans1),))
     return board["a"].value()
 
 
