@@ -30,8 +30,8 @@ def part1(seq):
     return sum(1 for _ in repeat(40, see_and_say, seq))
 
 
-def part2(lines, ans1=None):
-    return "ans2"
+def part2(seq, ans1=None):
+    return sum(1 for _ in repeat(50, see_and_say, seq))
 
 
 def jingle(filename=None, filepath=None, input=None):
