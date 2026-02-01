@@ -3,11 +3,10 @@ def parse(input):
 
 
 def part1(lines):
-    print(f"{lines}\n\n")
-    return "ans1"
+    return sum(len(line) - len(eval(line)) for line in lines)
 
 
-def part2(lines, ans1=None):
+def part2(data, ans1=None):
     return "ans2"
 
 
