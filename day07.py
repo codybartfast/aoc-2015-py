@@ -11,7 +11,7 @@ def parse(input):
     }
 
 
-def output(device, operand):
+def eval(device, operand):
     if operand.isdigit():
         return int(operand)
 
@@ -21,29 +21,29 @@ def output(device, operand):
 
     match gate.spec:
         case [wire_id]:
-            gate.value = output(device, wire_id)
+            gate.value = eval(device, wire_id)
         case ["NOT", a]:
-            gate.value = ~ output(device, a)
+            gate.value = ~eval(device, a)
         case [a, "AND", b]:
-            gate.value = output(device, a) & output(device, b)
+            gate.value = eval(device, a) & eval(device, b)
         case [a, "OR", b]:
-            gate.value = output(device, a) | output(device, b)
+            gate.value = eval(device, a) | eval(device, b)
         case [a, "LSHIFT", b]:
-            gate.value = output(device, a) << output(device, b)
+            gate.value = eval(device, a) << eval(device, b)
         case [a, "RSHIFT", b]:
-            gate.value = output(device, a) >> output(device, b)
+            gate.value = eval(device, a) >> eval(device, b)
     return gate.value
 
 
 def part1(device):
-    return output(device, "a")
+    return eval(device, "a")
 
 
 def part2(device, ans1=None):
     for gate in device.values():
         gate.value = None
     device["b"].spec = [str(ans1)]
-    return output(device, "a")
+    return eval(device, "a")
 
 
 def jingle(filename=None, filepath=None, input=None):
