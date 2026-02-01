@@ -21,9 +21,10 @@ def see_and_say(seq):
 
 
 def repeat(n, func, arg):
-    if n == 1:
-        return func(arg)
-    return func(repeat(n - 1, func, arg))
+    rslt = arg
+    for _ in range(n):
+        rslt = func(rslt)
+    return rslt
 
 
 def part1(seq):
