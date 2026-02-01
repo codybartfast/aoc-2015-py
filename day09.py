@@ -3,39 +3,33 @@ def parse(text):
         (parts[0], parts[2]): int(parts[4])
         for parts in map(str.split, text.splitlines())
     }
-    returns = {
-        (end, start): distance for (start, end), distance in routes.items()
-    }
+    returns = {(end, start): distance for (start, end), distance in routes.items()}
     return routes | returns
 
 
-def locations(routes):
-    return set(key[0] for key in routes)
-    
-
-def permutations(locations):
+def perms(locations):
     if len(locations) == 1:
         yield list(locations)
     for loc in locations:
-        for perm in permutations(locations - {loc}):
+        for perm in perms(locations - {loc}):
             yield [loc] + perm
 
 
 def route_length(distances, route):
     return sum(distances[leg] for leg in zip(route, route[1:]))
-    
+
+
+def all_lengths(distances):
+    locations = set(key[0] for key in distances)
+    return (route_length(distances, route) for route in perms(locations))
+
 
 def part1(distances):
-    locs = locations(distances)
-    routes = permutations(locs)
-    return min(route_length(distances, route) for route in routes)
+    return min(all_lengths(distances))
 
 
 def part2(distances, ans1=None):
-    locs = locations(distances)
-    routes = permutations(locs)
-    return max(route_length(distances, route) for route in routes)
-
+    return max(all_lengths(distances))
 
 
 def jingle(filename=None, filepath=None, input=None):
