@@ -6,8 +6,8 @@ def part1(lines):
     return sum(len(line) - len(eval(line)) for line in lines)
 
 
-def part2(data, ans1=None):
-    return "ans2"
+def part2(lines, ans1=None):
+    return sum(len(repr(line).replace('"', '\\"')) - len(line) for line in lines)
 
 
 def jingle(filename=None, filepath=None, input=None):
