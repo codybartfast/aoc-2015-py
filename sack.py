@@ -20,11 +20,11 @@ def read_input(filename=None, filepath=None):
         filepath = Path(__file__).resolve().parent / "input" / YEAR
         filepath = filepath / f"day{day}" / f"{filename}"
     with open(filepath, encoding="utf-8") as f:
-        input = f.read()
-    return input.rstrip("\n")
+        text = f.read()
+    return text.rstrip("\n")
 
 
-def present(input, parse, part1, part2):
+def present(text, parse, part1, part2):
     import time
 
     pc_start = time.perf_counter()
@@ -39,7 +39,7 @@ def present(input, parse, part1, part2):
 
 
     pc_parse_before = time.perf_counter()
-    data = parse(input)
+    data = parse(text)
     pc_parse_after = time.perf_counter()
 
     pc_part1_before = time.perf_counter()

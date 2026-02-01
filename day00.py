@@ -1,5 +1,5 @@
-def parse(input):
-    return input.splitlines()
+def parse(text):
+    return text.splitlines()
 
 
 def part1(lines):
