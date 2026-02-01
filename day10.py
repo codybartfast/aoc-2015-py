@@ -2,18 +2,16 @@ def parse(text):
     return list(map(int, text))
 
 
-def see_and_say(seq):
+def look_and_say(seq):
     prev = None
     count = 0
     for n in seq:
-        if prev is None:
-            prev = n
-            count = 1
-        elif n == prev:
+        if n == prev:
             count += 1
         else:
-            yield count
-            yield prev
+            if prev is not None:
+                yield count
+                yield prev
             prev = n
             count = 1
     yield count
@@ -28,11 +26,11 @@ def repeat(n, func, arg):
 
 
 def part1(seq):
-    return sum(1 for _ in repeat(40, see_and_say, seq))
+    return sum(1 for _ in repeat(40, look_and_say, seq))
 
 
 def part2(seq, ans1=None):
-    return sum(1 for _ in repeat(50, see_and_say, seq))
+    return sum(1 for _ in repeat(50, look_and_say, seq))
 
 
 def jingle(filename=None, filepath=None, input=None):
