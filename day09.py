@@ -1,10 +1,9 @@
 def parse(text):
-    routes = {
-        (parts[0], parts[2]): int(parts[4])
-        for parts in map(str.split, text.splitlines())
-    }
-    returns = {(end, start): distance for (start, end), distance in routes.items()}
-    return routes | returns
+    routes = {}
+    for [start, _, end, _, dist] in map(str.split, text.splitlines()):
+        routes[(start, end)] = int(dist)
+        routes[(end, start)] = int(dist)
+    return routes
 
 
 def perms(locations):
