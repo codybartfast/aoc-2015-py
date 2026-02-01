@@ -31,8 +31,11 @@ def part1(distances):
     return min(route_length(distances, route) for route in routes)
 
 
-def part2(lines, ans1=None):
-    return "ans2"
+def part2(distances, ans1=None):
+    locs = locations(distances)
+    routes = permutations(locs)
+    return max(route_length(distances, route) for route in routes)
+
 
 
 def jingle(filename=None, filepath=None, input=None):
