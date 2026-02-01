@@ -1,64 +1,49 @@
 class Gate:
-    def __init__(self, board, op, args):
-        self.board = board
-        self.op = op
-        self.args = args
-        self._value = None
-
-    def lookup(self, operand):
-        if operand.isdigit():
-            return int(operand)
-        return self.board[operand].value()
-
-    def calc(self):
-        vals = map(self.lookup, self.args)
-        return self.op(*vals)
-
-    def value(self):
-        if not self._value:
-            self._value = self.calc()
-        return self._value
-
-
-ops = {
-    "ID": lambda a: a,
-    "NOT": lambda a: ~a,
-    "AND": lambda a, b: a & b,
-    "OR": lambda a, b: a | b,
-    "LSHIFT": lambda a, b: a << b,
-    "RSHIFT": lambda a, b: a >> b,
-}
+    def __init__(self, spec):
+        self.spec = spec
+        self.value = None
 
 
 def parse(input):
-    return [
-        [expr.split(), wire]
-        for [expr, wire] in [line.split(" -> ") for line in input.splitlines()]
-    ]
+    return {
+        out_wire: Gate(expr.split())
+        for [expr, out_wire] in [line.split(" -> ") for line in input.splitlines()]
+    }
 
 
-def wire_board(wire_info, b_val=-1):
-    board = {}
-    for [parts, wire] in wire_info:
-        if len(parts) == 1:
-            board[wire] = Gate(board, ops["ID"], (parts[0],))
-        elif len(parts) == 2:
-            board[wire] = Gate(board, ops["NOT"], (parts[1],))
-        else:
-            [a, op, b] = parts
-            board[wire] = Gate(board, ops[op], (a, b))
-    return board
+def output(device, operand):
+    if operand.isdigit():
+        return int(operand)
+
+    gate = device[operand]
+    if gate.value is not None:
+        return gate.value
+
+    match gate.spec:
+        case [wire_id]:
+            gate.value = output(device, wire_id)
+        case ["NOT", a]:
+            gate.value = ~ output(device, a)
+        case [a, "AND", b]:
+            gate.value = output(device, a) & output(device, b)
+        case [a, "OR", b]:
+            gate.value = output(device, a) | output(device, b)
+        case [a, "LSHIFT", b]:
+            gate.value = output(device, a) << output(device, b)
+        case [a, "RSHIFT", b]:
+            gate.value = output(device, a) >> output(device, b)
+    return gate.value
 
 
-def part1(wire_info):
-    board = wire_board(wire_info)
-    return board["a"].value()
+def part1(device):
+    return output(device, "a")
 
 
-def part2(wire_info, ans1=None):
-    board = wire_board(wire_info, ans1)
-    board["b"] = Gate(board, ops["ID"], (str(ans1),))
-    return board["a"].value()
+def part2(device, ans1=None):
+    for gate in device.values():
+        gate.value = None
+    device["b"].spec = [str(ans1)]
+    return output(device, "a")
 
 
 def jingle(filename=None, filepath=None, input=None):
