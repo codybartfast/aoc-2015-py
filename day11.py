@@ -1,36 +1,40 @@
-CHARS = "abcdefghjkmnpqrstuvwxyz"
+CHARS = "abcdefghijklmnopqrstuvwxyz"
 
 
 def parse(text):
     return text
 
 
-def to_nums(password):
+def to_numeric(password):
     return list([CHARS.index(char) for char in password])
 
 
-def from_nums(numbers):
+def from_numeric(numbers):
     return "".join(CHARS[n] for n in numbers)
 
 
-def enum_nums(nums):
-    idx = len(nums) - 1
+def enum_numeric_passwords(npwd):
+    # This will overflow if no password is found
+    idx = len(npwd) - 1
     while True:
-        nums[idx] = (nums[idx] + 1) % len(CHARS)
-        if nums[idx] != 0:
-            yield nums
-            idx = len(nums) - 1
+        npwd[idx] = (npwd[idx] + 1) % len(CHARS)
+        if npwd[idx] != 0:
+            yield npwd
+            idx = len(npwd) - 1
         else:
             idx -= 1
 
 
-def happy_security_elf(nums):
+def happy_security_elf(illegal, npwd):
     got_asc = False
     asc_count = 0
     doubles = 0
     prev_asc = -2
     prev_dub = None
-    for n in nums:
+    for n in npwd:
+        if n in illegal:
+            return False
+
         if n == prev_asc + 1:
             asc_count += 1
             if asc_count == 2:
@@ -44,23 +48,24 @@ def happy_security_elf(nums):
             prev_dub = None
         else:
             prev_dub = n
+
     return got_asc and doubles >= 2
 
 
 def find_next(password):
-    nums = to_nums(password)
-    for ns in enum_nums(nums):
-        if happy_security_elf(ns):
-            return from_nums(ns)
+    illegal = to_numeric("ilo")
+    npwd = to_numeric(password)
+    for npwd in enum_numeric_passwords(npwd):
+        if happy_security_elf(illegal, npwd):
+            return from_numeric(npwd)
 
 
-def part1(data):
-    return find_next(data)
+def part1(password):
+    return find_next(password)
 
 
-def part2(data, ans1=None):
+def part2(_, ans1=None):
     return find_next(ans1)
-
 
 
 def jingle(filename=None, filepath=None, text=None):
