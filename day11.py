@@ -45,19 +45,21 @@ def happy_security_elf(nums):
         else:
             prev_dub = n
     return got_asc and doubles >= 2
-            
-    
+
 
 def part1(data):
     nums = to_nums(data)
-    # print(happy_security_elf(nums))
     for ns in enum_nums(nums):
         if happy_security_elf(ns):
             return from_nums(ns)
-        
+
 
 def part2(data, ans1=None):
-    return "ans2"
+    nums = to_nums(ans1)
+    for ns in enum_nums(nums):
+        if happy_security_elf(ns):
+            return from_nums(ns)
+
 
 
 def jingle(filename=None, filepath=None, text=None):
