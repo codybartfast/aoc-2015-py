@@ -2,20 +2,20 @@ def parse(text):
     return text.splitlines()
 
 
-def part1(lines):
-    print(f"{lines}\n\n")
+def part1(data):
+    print(f"{data}\n\n")
     return "ans1"
 
 
-def part2(lines, ans1=None):
+def part2(data, ans1=None):
     return "ans2"
 
 
-def jingle(filename=None, filepath=None, input=None):
+def jingle(filename=None, filepath=None, text=None):
     import sack
 
-    input = input if input else sack.read_input(filename, filepath)
-    sack.present(input, parse, part1, part2)
+    text = text if text else sack.read_input(filename, filepath)
+    sack.present(text, parse, part1, part2)
 
 
 if __name__ == "__main__":
