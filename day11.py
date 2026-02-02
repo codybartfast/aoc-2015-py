@@ -47,18 +47,19 @@ def happy_security_elf(nums):
     return got_asc and doubles >= 2
 
 
-def part1(data):
-    nums = to_nums(data)
+def find_next(password):
+    nums = to_nums(password)
     for ns in enum_nums(nums):
         if happy_security_elf(ns):
             return from_nums(ns)
+
+
+def part1(data):
+    return find_next(data)
 
 
 def part2(data, ans1=None):
-    nums = to_nums(ans1)
-    for ns in enum_nums(nums):
-        if happy_security_elf(ns):
-            return from_nums(ns)
+    return find_next(ans1)
 
 
 
