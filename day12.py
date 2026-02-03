@@ -1,15 +1,16 @@
+import json
+import re
+
 def parse(text):
-    return text.splitlines()
+    return text
 
 
 def part1(data):
-    print(f"{data}\n\n")
-    return "ans1"
+    return sum(int(m) for m in re.findall(r"-?\d+", data))
 
 
 def part2(data, ans1=None):
     return "ans2"
-
 
 def jingle(filename=None, filepath=None, text=None):
     import sack
