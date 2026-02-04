@@ -1,20 +1,16 @@
-INF = 10**18
-
-
 def parse(text):
-    contribs = {}
-    for a, contrib, b in [
+    joys = {}
+    for a, b, joy in [
         (
-            ord(parts[0][0]),
+            parts[0],
+            parts[10][:-1],
             (1 if parts[2] == "gain" else -1) * int(parts[3]),
-            ord(parts[10][0]),
         )
         for parts in [line.split() for line in text.splitlines()]
     ]:
-        new_contrib = contribs.get((a, b), 0) + contrib
-        contribs[a, b] = new_contrib
-        contribs[b, a] = new_contrib
-    return contribs
+        joys[a, b] = joys.get((a, b), 0) + joy
+        joys[b, a] = joys[a, b]
+    return joys
 
 
 def perms(set):
@@ -25,31 +21,20 @@ def perms(set):
             yield [item] + perm
 
 
-def best_straight(contributions, plan):
-    return sum(contributions[pair] for pair in zip(plan, plan[1:]))
+def arrange_seating(joys, skip_host):
+    return max(
+        sum(joys[pair] for pair in zip(plan, plan[1:]))
+        + (joys[plan[0], plan[-1]] if skip_host else 0)
+        for plan in perms(set(a for (a, b) in joys.keys()))
+    )
 
 
-def pursue_happiness(contributions, include_host):
-    best = -INF
-    diners = set(a for (a, b) in contributions.keys())
-
-    for plan in perms(diners):
-        happiness = best_straight(contributions, plan)
-        if not include_host:
-            happiness += contributions[plan[0], plan[-1]]
-
-        if happiness > best:
-            best = happiness
-
-    return best
+def part1(joys):
+    return arrange_seating(joys, True)
 
 
-def part1(data):
-    return pursue_happiness(data, False)
-
-
-def part2(data, ans1=None):
-    return pursue_happiness(data, True)
+def part2(joys, ans1=None):
+    return arrange_seating(joys, False)
 
 
 def jingle(filename=None, filepath=None, text=None):
