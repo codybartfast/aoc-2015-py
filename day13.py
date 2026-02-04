@@ -29,14 +29,15 @@ def best_straight(contributions, plan):
     return sum(contributions[pair] for pair in zip(plan, plan[1:]))
 
 
-def pursue_happiness(contributions):
+def pursue_happiness(contributions, include_host):
     best = -INF
     diners = set(a for (a, b) in contributions.keys())
 
     for plan in perms(diners):
-        happiness = (
-            best_straight(contributions, plan) + contributions[plan[0], plan[-1]]
-        )
+        happiness = best_straight(contributions, plan)
+        if not include_host:
+            happiness += contributions[plan[0], plan[-1]]
+
         if happiness > best:
             best = happiness
 
@@ -44,11 +45,11 @@ def pursue_happiness(contributions):
 
 
 def part1(data):
-    return pursue_happiness(data)
+    return pursue_happiness(data, False)
 
 
 def part2(data, ans1=None):
-    return "ans2"
+    return pursue_happiness(data, True)
 
 
 def jingle(filename=None, filepath=None, text=None):
