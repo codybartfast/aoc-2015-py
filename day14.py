@@ -8,8 +8,8 @@ def parse(text):
 def distance(deer, duration):
     speed, sprint, rest = deer
     full = duration // (sprint + rest)
-    rmndr = duration % (sprint + rest)
-    flight_time = full * sprint + min(sprint, rmndr)
+    remaindeer = duration % (sprint + rest)
+    flight_time = full * sprint + min(sprint, remaindeer)
     return flight_time * speed
 
 
@@ -17,9 +17,9 @@ def award_points(reindeer, duration):
     scores = [0] * len(reindeer)
     for time in range(1, duration + 1):
         distances = [distance(deer, time) for deer in reindeer]
-        best_dist = max(distances)
+        max_dist = max(distances)
         for idx in range(len(distances)):
-            if distances[idx] == best_dist:
+            if distances[idx] == max_dist:
                 scores[idx] += 1
     return max(scores)
 
