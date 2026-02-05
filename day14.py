@@ -4,21 +4,32 @@ def parse(text):
         for parts in [line.split() for line in text.splitlines()]
     ]
 
-def distance(deer, time):
+
+def distance(deer, duration):
     speed, sprint, rest = deer
-    full = time // (sprint + rest)
-    rmndr = time % (sprint + rest)
+    full = duration // (sprint + rest)
+    rmndr = duration % (sprint + rest)
     flight_time = full * sprint + min(sprint, rmndr)
     return flight_time * speed
-    
-def part1(reindeer):
-    print(f"{reindeer}\n\n")
 
+
+def award_points(reindeer, duration):
+    scores = [0] * len(reindeer)
+    for time in range(1, duration + 1):
+        distances = [distance(deer, time) for deer in reindeer]
+        best_dist = max(distances)
+        for idx in range(len(distances)):
+            if distances[idx] == best_dist:
+                scores[idx] += 1
+    return max(scores)
+
+
+def part1(reindeer):
     return max(distance(deer, 2503) for deer in reindeer)
 
 
 def part2(reindeer, ans1=None):
-    return "ans2"
+    return award_points(reindeer, 2503)
 
 
 def jingle(filename=None, filepath=None, text=None):
