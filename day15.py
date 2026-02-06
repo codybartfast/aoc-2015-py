@@ -3,43 +3,45 @@ from math import prod
 
 def parse(text):
     return [
-        tuple(int(attr_val.split()[1]) for attr_val in attr_vals)
-        for attr_vals in [line.split(": ")[1].split(", ") for line in text.splitlines()]
+        tuple(int(prop_val.split()[1]) for prop_val in prop_vals)
+        for prop_vals in [line.split(": ")[1].split(", ") for line in text.splitlines()]
     ]
 
 
-def add_ingredient(attributes, ingredient, spoons):
+def add_ingredient(properties, ingredient, spoons):
     return [
-        attributes[idx] + spoons * ingredient[idx] for idx in range(len(attributes))
+        properties[idx] + spoons * ingredient[idx] for idx in range(len(properties))
     ]
 
 
-def recipes(attributes, ingredients, remaining_spoons):
+def recipes(properties, ingredients, remaining_spoons):
     if len(ingredients) == 1:
-        yield add_ingredient(attributes, ingredients[0], remaining_spoons)
+        yield add_ingredient(properties, ingredients[0], remaining_spoons)
     else:
         for spoons in range(remaining_spoons + 1):
             yield from recipes(
-                add_ingredient(attributes, ingredients[0], spoons),
+                add_ingredient(properties, ingredients[0], spoons),
                 ingredients[1:],
                 remaining_spoons - spoons,
             )
 
 
-def score(attributes, need_500=False):
-    [*qualities, cals] = attributes
-    if ((not need_500) or (need_500 and cals == 500)) and all(a > 0 for a in qualities):
-        return prod(qualities)
+def score(properties, need_500=False):
+    [*props, cals] = properties
+    if ((not need_500) or (need_500 and cals == 500)) and all(a > 0 for a in props):
+        return prod(props)
     else:
         return 0
 
 
-def part1(data):
-    return max(map(score, recipes([0] * len(data[0]), data, 100)))
+def part1(properties):
+    return max(map(score, recipes([0] * len(properties[0]), properties, 100)))
 
 
-def part2(data, ans1=None):
-    return max(score(atts, True) for atts in recipes([0] * len(data[0]), data, 100))
+def part2(properties, ans1=None):
+    return max(
+        score(atts, True) for atts in recipes([0] * len(properties[0]), properties, 100)
+    )
 
 
 def jingle(filename=None, filepath=None, text=None):
