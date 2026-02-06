@@ -26,9 +26,12 @@ def recipes(attributes, ingredients, remaining_spoons):
             )
 
 
-def score(attributes):
-    attributes = attributes[:-1]
-    return prod(attributes) if all(a > 0 for a in attributes) else 0
+def score(attributes, need_500=False):
+    [*qualities, cals] = attributes
+    if ((not need_500) or (need_500 and cals == 500)) and all(a > 0 for a in qualities):
+        return prod(qualities)
+    else:
+        return 0
 
 
 def part1(data):
@@ -36,7 +39,7 @@ def part1(data):
 
 
 def part2(data, ans1=None):
-    return "ans2"
+    return max(score(atts, True) for atts in recipes([0] * len(data[0]), data, 100))
 
 
 def jingle(filename=None, filepath=None, text=None):
