@@ -13,15 +13,14 @@ MFCSAM = {
 
 
 def parse(text):
-    aunts = []
+    aunts = {}
     for line in text.splitlines():
         name_numb, kvps = line.split(": ", 1)
-        name, numb = name_numb.split()
-        aunt = {name: numb} | {
+        numb = int(name_numb.split()[1])
+        aunts[numb] = {
             key: int(value)
             for (key, value) in [kvp.split(": ") for kvp in kvps.split(", ")]
         }
-        aunts.append(aunt)
     return aunts
 
 
@@ -37,13 +36,11 @@ def turbo_match(key, scanVal, auntVal):
     return auntVal == scanVal
 
 
-def find_matches(MFCSAM, aunts, matches):
+def find_matches(MFCSAM, aunts, is_match):
     return [
-        aunt["Sue"]
-        for aunt in aunts
-        if all(
-            matches(key, MFCSAM[key], aunt[key]) for key in aunt.keys() if key != "Sue"
-        )
+        number
+        for number, aunt in aunts.items()
+        if all(is_match(key, MFCSAM[key], aunt[key]) for key in aunt.keys())
     ]
 
 
