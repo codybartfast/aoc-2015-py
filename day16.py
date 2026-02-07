@@ -25,17 +25,34 @@ def parse(text):
     return aunts
 
 
-def part1(aunts):
-    matches = [
+def equality_match(key, scanVal, auntVal):
+    return scanVal == auntVal
+
+
+def turbo_match(key, scanVal, auntVal):
+    if key in ["cats", "trees"]:
+        return scanVal <= auntVal
+    if key in ["goldfish", "pomeranians"]:
+        return scanVal >= auntVal
+    return auntVal == scanVal
+
+
+def find_matches(MFCSAM, aunts, matches):
+    return [
         aunt["Sue"]
         for aunt in aunts
-        if all(aunt[key] == MFCSAM[key] for key in aunt.keys() if key != "Sue")
+        if all(
+            matches(key, MFCSAM[key], aunt[key]) for key in aunt.keys() if key != "Sue"
+        )
     ]
-    return matches[0]
+
+
+def part1(aunts):
+    return find_matches(MFCSAM, aunts, equality_match)[0]
 
 
 def part2(aunts, ans1=None):
-    return "ans2"
+    return find_matches(MFCSAM, aunts, turbo_match)[0]
 
 
 def jingle(filename=None, filepath=None, text=None):
