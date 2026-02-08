@@ -2,8 +2,9 @@ def parse(text):
     return tuple(sorted(map(int, (text.splitlines())), reverse=True))
 
 
-def solution_count(all, idx, remaining, known):
+def solution_count(all, idx, remaining, used_counts, used):
     if remaining == 0:
+        used_counts.append(used)
         return 1
 
     if idx >= len(all):
@@ -12,32 +13,27 @@ def solution_count(all, idx, remaining, known):
     if remaining < 0:
         return 0
 
-    key = (remaining, idx)
-    if key in known:
-        return known[key]
-
-    def remember(count):
-        known[key] = count
-        return count
-
     capacity = sum(all[idx:])
     if capacity < remaining:
-        return remember(0)
+        return 0
 
     count = sum(
-        solution_count(all, i + 1, remaining - all[i], known)
+        solution_count(all, i + 1, remaining - all[i], used_counts, used + 1)
         for i in range(idx, len(all))
     )
-    return remember(count)
+    return count
 
 
 def part1(data):
     print(f"{data}\n\n")
-    return solution_count(data, 0, 150, {})
+    return solution_count(data, 0, 150, [], 0)
 
 
 def part2(data, ans1=None):
-    return "ans2"
+    used_counts = []
+    solution_count(data, 0, 150, used_counts, 0)
+    min_used = min(used_counts)
+    return used_counts.count(min_used)
 
 
 def jingle(filename=None, filepath=None, text=None):
