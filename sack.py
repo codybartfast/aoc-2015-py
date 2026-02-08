@@ -3,6 +3,9 @@ import sys
 
 YEAR = "2015"
 
+# Possible future (breaking) changes:
+#     - Take additional args from cli (e.g. paramater that changes between test and input)
+#     - Pass state between parts 
 
 def _day():
     filepath = sys._getframe(2).f_code.co_filename
@@ -36,7 +39,6 @@ def present(text, parse, part1, part2):
     print(title)
     print("=" * len(title))
     print()
-
 
     pc_parse_before = time.perf_counter()
     data = parse(text)

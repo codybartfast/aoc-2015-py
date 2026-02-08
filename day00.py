@@ -1,5 +1,11 @@
+def parse_line(line):
+    return line
+    parts = line.split()
+    return parts
+
+
 def parse(text):
-    return text.splitlines()
+    return map(parse_line, text.splitlines())
 
 
 def part1(data):
