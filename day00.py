@@ -5,7 +5,7 @@ def parse_line(line):
 
 
 def parse(text):
-    return map(parse_line, text.splitlines())
+    return [parse_line(line) for line in text.splitlines()]
 
 
 def part1(data):
