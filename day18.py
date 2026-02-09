@@ -1,3 +1,5 @@
+# Using bits is overkill given size but I wanted to try it :-)
+
 # Assumes lights is square in a couple of places
 
 
@@ -22,28 +24,30 @@ def step(lights):
 
     next = [0] * len(lights)
 
-    for _col in range(width):
+    for _ in range(width):
         for row in range(1, len(lights) - 1):
-            count = sum((lights[row + d] & count_mask).bit_count() for d in [-1, 0, 1])
+            count = (
+                (lights[row - 1] & count_mask).bit_count()
+                + (lights[row] & count_mask).bit_count()
+                + (lights[row + 1] & count_mask).bit_count()
+            )
             if count == 3 or (count == 4 and (lights[row] & on_mask)):
                 next[row] |= 1
             next[row] <<= 1
-        for row in range(len(lights)):
-            lights[row] >>= 1
+        count_mask <<= 1
+        on_mask <<= 1
 
     return next
 
 
 def set_corners(lights):
-    width = len(lights) - 2
-    corner_mask = (1 << width) | 0b10
+    corner_mask = (1 << len(lights) - 2) | 0b10
     lights[1] |= corner_mask
     lights[len(lights) - 2] |= corner_mask
     return lights
 
 
 def part1(lights):
-    lights = list(lights)
     for _ in range(100):
         lights = step(lights)
     return sum(row.bit_count() for row in lights)
