@@ -12,11 +12,11 @@ def parse(text):
 
 
 def replace_all(molecule, replacements):
-    for idx in range(len(molecule)):
-        prefix = molecule[:idx]
-        suffix = molecule[idx + 1 :]
-        for repl in replacements.get(molecule[idx], []):
-            yield "".join(prefix + repl + suffix)
+    return (
+        "".join(molecule[:idx] + repl + molecule[idx + 1 :])
+        for idx in range(len(molecule))
+        for repl in replacements.get(molecule[idx], [])
+    )
 
 
 def part1(data):
