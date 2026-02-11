@@ -23,6 +23,7 @@ def part1(data):
     return len(set(replace_all(*data)))
 
 
+# Spent an age trying to find the seq or replacements before realising ...
 def part2(data, ans1=None):
     med, _ = data
     remaining = len(med)
