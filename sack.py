@@ -7,6 +7,7 @@ YEAR = "2015"
 # Possible future (breaking) changes:
 #     - Take additional args from cli (e.g. paramater that changes between test and input)
 #     - Pass state between parts 
+# _day() gets called twice, check that's expected.
 
 def _day():
     filename = Path(sys._getframe(2).f_code.co_filename).name
@@ -14,7 +15,6 @@ def _day():
     day_match = re.search(r"day(\d\d)", filename)
     if not day_match:
         raise RuntimeError(f"Couldn't get day from filename: {filename}")
-    print("DAY", day_match.group(1), filename)
     return day_match.group(1)
 
 

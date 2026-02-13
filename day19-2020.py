@@ -2,8 +2,9 @@
 # https://git.sr.ht/~codybartfast/aoc15/tree/main/item/Day19.fs
 #
 # Because the main solution feels a bit of "cheat" (just counting 'Ar's and
-# 'Y's) I thought I'd try a more general solution.  I remembered this problem
-# which usually means I sweated some blood on the original solution.
+# 'Y's) I thought I'd reacquaint myslef with my previous solution.  I remember
+# this problem which means I likely sweated some blood o it, although I'm not
+# at all sure it's ;robust, but hey it works even if just by luck.
 
 import re
 
@@ -102,14 +103,17 @@ def _sort(sources):
 
 def fabricate(replacements, molecule, source, max_trials):
     def fab(steps, sources):
-        nexts = (
-            next for source in sources for next in next_sources(replacements, source)
-        )
-        sorted_sources = tuple(_sort(nexts)[:max_trials])
+        sources = tuple(
+            _sort(
+                next
+                for source in sources
+                for next in next_sources(replacements, source)
+            )
+        )[:max_trials]
 
-        if not sorted_sources[0][0]:
+        if not sources[0][0]:
             return steps
-        return fab(steps + 1, sorted_sources)
+        return fab(steps + 1, sources)
 
     return fab(1, ((molecule, source),)) - len(molecule)
 
