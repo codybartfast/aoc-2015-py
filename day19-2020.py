@@ -14,8 +14,8 @@ def parse(text):
     replacements = {}
     for line in repl_txt.splitlines():
         parts = line.split()
-        replacements.setdefault(parts[0], []).append(elem_rx.findall(parts[2]))
-    return elem_rx.findall(molecule), replacements
+        replacements.setdefault(parts[0], []).append(tuple(elem_rx.findall(parts[2])))
+    return tuple(elem_rx.findall(molecule)), replacements
 
 
 # let altheads right =
@@ -30,12 +30,11 @@ def parse(text):
 
 
 def alt_heads(replacements, right):
-    match right:
-        case []:
-            return
-        case [el, *rest]:
-            for sub in replacements.get(el, []):
-                yield sub + rest
+    if not right:
+        return
+    el, rest = right[0], right[1:]
+    for sub in replacements.get(el, ()):
+        yield sub + rest
 
 
 # let splits list =
@@ -69,8 +68,28 @@ def all_children(replacements, molecule):
 #             yield (tlen - 1, ts), ss
 #         yield! source |> altheads |> Seq.map (fun src -> (tlen, target), src) }
 
+
+def next_sources(replacements, source):
+    target, molecule = source
+    if not target or not molecule:
+        return
+    [t, *ts] = target
+    [m, *ms] = molecule
+    if t == m:
+        yield ts, ms
+    yield from ((target, mole) for mole in alt_heads(replacements, molecule))
+
+
 # let sort =
 #     Seq.distinct >> Seq.groupBy (fst>>fst) >> Seq.sortBy fst >> Seq.collect snd
+
+
+def _sort(sources):
+    sources = tuple(sources)
+    for source in sources:
+        print(source)
+    return sorted(set(sources), key=lambda targ_mole: len(targ_mole[0]))
+
 
 # let fabricate molecule source maxtrials =
 #     let rec fab steps sources =
@@ -84,13 +103,31 @@ def all_children(replacements, molecule):
 #     |> (fun steps -> steps - len)
 
 
+def fabricate(replacements, molecule, source, max_trials):
+    def fab(steps, sources):
+        # print(f"FAB!  sources:{sources}")
+        nexts = (
+            next for source in sources for next in next_sources(replacements, source)
+        )
+        sorted_sources = tuple(_sort(nexts)[:max_trials])
+        # print("SORTED_SOURCES:", sorted_sources)
+        match sorted_sources:
+            case (((), _), *_):
+                return steps
+            case _:
+                fab(steps + 1, sorted_sources)
+
+    return fab(1, ((molecule, source),))
+
+
 def part1(data):
     medicine, replacements = data
     return len(set(all_children(replacements, medicine)))
 
 
 def part2(data, ans1=None):
-    return "ans2"
+    medicine, replacements = data
+    return fabricate(replacements, medicine, ("e",), 100)
 
 
 def jingle(filename=None, filepath=None, text=None):
