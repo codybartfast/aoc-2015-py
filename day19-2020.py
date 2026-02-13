@@ -73,8 +73,8 @@ def next_sources(replacements, source):
     target, molecule = source
     if not target or not molecule:
         return
-    [t, *ts] = target
-    [m, *ms] = molecule
+    t, ts = target[0], target[1:]
+    m, ms = molecule[0], molecule[1:]
     if t == m:
         yield ts, ms
     yield from ((target, mole) for mole in alt_heads(replacements, molecule))
@@ -85,9 +85,6 @@ def next_sources(replacements, source):
 
 
 def _sort(sources):
-    sources = tuple(sources)
-    for source in sources:
-        print(source)
     return sorted(set(sources), key=lambda targ_mole: len(targ_mole[0]))
 
 
@@ -105,19 +102,16 @@ def _sort(sources):
 
 def fabricate(replacements, molecule, source, max_trials):
     def fab(steps, sources):
-        # print(f"FAB!  sources:{sources}")
         nexts = (
             next for source in sources for next in next_sources(replacements, source)
         )
         sorted_sources = tuple(_sort(nexts)[:max_trials])
-        # print("SORTED_SOURCES:", sorted_sources)
-        match sorted_sources:
-            case (((), _), *_):
-                return steps
-            case _:
-                fab(steps + 1, sorted_sources)
 
-    return fab(1, ((molecule, source),))
+        if not sorted_sources[0][0]:
+            return steps
+        return fab(steps + 1, sorted_sources)
+
+    return fab(1, ((molecule, source),)) - len(molecule)
 
 
 def part1(data):
