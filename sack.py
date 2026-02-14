@@ -34,6 +34,8 @@ def read_input(filename=None, filepath=None):
 
 def present(text, parse, part1, part2):
     import time
+    def write(*args):
+        print("# ", *args)
 
     pc_start = time.perf_counter()
     day = _day()
@@ -41,9 +43,9 @@ def present(text, parse, part1, part2):
     title = f"Day {day}"
 
     print("\n")
-    print(title)
-    print("=" * len(title))
-    print()
+    write(title)
+    write("=" * len(title))
+    write()
 
     pc_parse_before = time.perf_counter()
     data = parse(text)
@@ -52,20 +54,20 @@ def present(text, parse, part1, part2):
     pc_part1_before = time.perf_counter()
     ans1 = part1(data)
     pc_part1_after = time.perf_counter()
-    print(f"Part 1: {ans1}")
+    write(f"Part 1: {ans1}")
 
     pc_part2_before = time.perf_counter()
     ans2 = part2(data, ans1)
     pc_part2_after = time.perf_counter()
-    print(f"Part 2: {ans2}")
+    write(f"Part 2: {ans2}")
 
     pc_stop = time.perf_counter()
 
-    print()
-    print("Timings")
-    print("---------------------")
-    print(f"  Parse: {pc_parse_after - pc_parse_before:12.6f}")
-    print(f" Part 1: {pc_part1_after - pc_part1_before:12.6f}")
-    print(f" Part 2: {pc_part2_after - pc_part2_before:12.6f}")
-    print(f"Elapsed: {pc_stop - pc_start:12.6f}")
-    print()
+    write()
+    write("Timings")
+    write("---------------------")
+    write(f"  Parse: {pc_parse_after - pc_parse_before:12.6f}")
+    write(f" Part 1: {pc_part1_after - pc_part1_before:12.6f}")
+    write(f" Part 2: {pc_part2_after - pc_part2_before:12.6f}")
+    write(f"Elapsed: {pc_stop - pc_start:12.6f}")
+    write()
