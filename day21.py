@@ -39,7 +39,8 @@ def parse_line(line):
 
 
 def parse(text):
-    return tuple(parse_line(line) for line in text.splitlines())
+    boss = tuple(parse_line(line) for line in text.splitlines())
+    return boss, parse_shop_text(shop_text)
 
 
 def player_wins(player, boss):
@@ -66,21 +67,20 @@ def equip_choices(shop):
                     yield map(sum, zip(ring1, ring2, armour, weapon))
 
 
-def cheap_victory(p_hp, shop, boss):
-    best_cost = 10**18
+def equip_outcomes(p_hp, shop, boss):
     for cost, damage, armour in equip_choices(shop):
-        if cost < best_cost and player_wins((p_hp, damage, armour), boss):
-            best_cost = cost
-    return best_cost
+        yield player_wins((p_hp, damage, armour), boss), cost
 
-
-def part1(boss):
-    shop = parse_shop_text(shop_text)
-    return cheap_victory(100, shop, boss)
+def part1(data):
+    boss, shop = data
+    outcomes = equip_outcomes(100, shop, boss)
+    return min(oc[1] for oc in outcomes if oc[0])
 
 
 def part2(data, ans1=None):
-    return "ans2"
+    boss, shop = data
+    outcomes = equip_outcomes(100, shop, boss)
+    return max(oc[1] for oc in outcomes if not oc[0])
 
 
 def jingle(filename=None, filepath=None, text=None):
