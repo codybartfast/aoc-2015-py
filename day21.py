@@ -22,11 +22,10 @@ Defense +3   80     0       3
 """
 
 
-def parse_shop_chunk(chunk):
-    return [tuple(map(int, line.split()[-3:])) for line in chunk.splitlines()[1:]]
-
-
 def parse_shop_text(shop_text):
+    def parse_shop_chunk(chunk):
+        return [tuple(map(int, line.split()[-3:])) for line in chunk.splitlines()[1:]]
+
     shop = [parse_shop_chunk(chunk) for chunk in shop_text.split("\n\n")]
     shop[1].insert(0, (0, 0, 0))
     shop[2].insert(0, (0, 0, 0))
@@ -34,11 +33,10 @@ def parse_shop_text(shop_text):
     return shop
 
 
-def parse_line(line):
-    return int(line.split()[-1])
-
-
 def parse(text):
+    def parse_line(line):
+        return int(line.split()[-1])
+
     boss = tuple(parse_line(line) for line in text.splitlines())
     return boss, parse_shop_text(shop_text)
 
@@ -70,6 +68,7 @@ def equip_choices(shop):
 def equip_outcomes(p_hp, shop, boss):
     for cost, damage, armour in equip_choices(shop):
         yield player_wins((p_hp, damage, armour), boss), cost
+
 
 def part1(data):
     boss, shop = data
