@@ -1,3 +1,17 @@
+#  Day 21
+#  ======
+#
+#  Part 1: 78
+#  Part 2: 148
+#
+#  Timings
+#  ---------------------
+#    Parse:     0.000018
+#   Part 1:     0.000469
+#   Part 2:     0.000452
+#  Elapsed:     0.000984
+#
+
 shop_text = """Weapons:    Cost  Damage  Armor
 Dagger        8     4       0
 Shortsword   10     5       0
