@@ -70,4 +70,4 @@ def present(text, parse, part1, part2):
     write(f" Part 1: {pc_part1_after - pc_part1_before:12.6f}")
     write(f" Part 2: {pc_part2_after - pc_part2_before:12.6f}")
     write(f"Elapsed: {pc_stop - pc_start:12.6f}")
-    write()
+    print()

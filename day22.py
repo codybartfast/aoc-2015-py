@@ -1,3 +1,17 @@
+#  Day 22
+#  ======
+#
+#  Part 1: 1269
+#  Part 2: 1309
+#
+#  Timings
+#  ---------------------
+#    Parse:     0.000003
+#   Part 1:     0.008398
+#   Part 2:     0.006147
+#  Elapsed:     0.014601
+
+
 TURN = 0
 P_HP = 1
 P_ARM = 2
@@ -10,111 +24,111 @@ POISON_ENDS = 8
 RECHARGE_ENDS = 9
 
 
-def initial_state(p_hp, mana, b_hp, b_dmg):
-    state = [0] * 10
-    state[P_HP] = p_hp
-    state[MANA] = mana
-    state[B_HP] = b_hp
-    state[B_DMG] = b_dmg
-    state[SHIELD_ENDS] = -1
-    state[POISON_ENDS] = -1
-    state[RECHARGE_ENDS] = -1
-    return state
+def initial_game(p_hp, mana, b_hp, b_dmg):
+    game = [0] * 10
+    game[P_HP] = p_hp
+    game[MANA] = mana
+    game[B_HP] = b_hp
+    game[B_DMG] = b_dmg
+    game[SHIELD_ENDS] = -1
+    game[POISON_ENDS] = -1
+    game[RECHARGE_ENDS] = -1
+    return game
 
 
 def parse(text):
     return [int(line.split()[-1]) for line in text.splitlines()]
 
 
-def spend(state, amount):
-    if state[MANA] < amount:
+def spend(game, amount):
+    if game[MANA] < amount:
         return False
-    state[MANA] -= amount
-    state[MANA_SPENT] += amount
+    game[MANA] -= amount
+    game[MANA_SPENT] += amount
     return True
 
 
-def missile(state):
-    if not spend(state, 53):
+def missile(game):
+    if not spend(game, 53):
         return None
-    state[B_HP] -= 4
-    return state
+    game[B_HP] -= 4
+    return game
 
 
-def drain(state):
-    if not spend(state, 73):
+def drain(game):
+    if not spend(game, 73):
         return None
-    state[P_HP] += 2
-    state[B_HP] -= 2
-    return state
+    game[P_HP] += 2
+    game[B_HP] -= 2
+    return game
 
 
-def shield(state):
-    if state[SHIELD_ENDS] > state[TURN] or not spend(state, 113):
+def shield(game):
+    if game[SHIELD_ENDS] > game[TURN] or not spend(game, 113):
         return None
-    state[SHIELD_ENDS] = state[TURN] + 6
-    return state
+    game[SHIELD_ENDS] = game[TURN] + 6
+    return game
 
 
-def poison(state):
-    if state[POISON_ENDS] > state[TURN] or not spend(state, 173):
+def poison(game):
+    if game[POISON_ENDS] > game[TURN] or not spend(game, 173):
         return None
-    state[POISON_ENDS] = state[TURN] + 6
-    return state
+    game[POISON_ENDS] = game[TURN] + 6
+    return game
 
 
-def recharge(state):
-    if state[RECHARGE_ENDS] > state[TURN] or not spend(state, 229):
+def recharge(game):
+    if game[RECHARGE_ENDS] > game[TURN] or not spend(game, 229):
         return None
-    state[RECHARGE_ENDS] = state[TURN] + 5
-    return state
+    game[RECHARGE_ENDS] = game[TURN] + 5
+    return game
 
 
 spells = [missile, drain, shield, poison, recharge]
 
 
-def apply_effects(state):
-    state[P_ARM] = 7 if state[SHIELD_ENDS] > state[TURN] else 0
-    if state[POISON_ENDS] > state[TURN]:
-        state[B_HP] -= 3
-    if state[RECHARGE_ENDS] > state[TURN]:
-        state[MANA] += 101
-    return state
+def apply_effects(game):
+    game[P_ARM] = 7 if game[SHIELD_ENDS] > game[TURN] else 0
+    if game[POISON_ENDS] > game[TURN]:
+        game[B_HP] -= 3
+    if game[RECHARGE_ENDS] > game[TURN]:
+        game[MANA] += 101
+    return game
 
 
-def player_turn(state):
-    state[TURN] += 1
-    return (spelled for spell in spells if (spelled := spell(list(state))))
+def player_turn(game):
+    game[TURN] += 1
+    return (spelled for spell in spells if (spelled := spell(list(game))))
 
 
-def boss_turn(state, is_hard):
-    state[TURN] += 1
-    damage = max(1, state[B_DMG] - state[P_ARM])
+def boss_turn(game, is_hard):
+    game[TURN] += 1
+    damage = max(1, game[B_DMG] - game[P_ARM])
     if is_hard:
         damage = damage + 1
-    state[P_HP] -= damage
-    return state if state[P_HP] > 0 else None
+    game[P_HP] -= damage
+    return game if game[P_HP] > 0 else None
 
 
-def battle(states, is_hard):
-    best_cost = 10**18
-    while states:
-        if states[0][TURN] % 2 == 0:
-            next_states = [next for state in states for next in player_turn(state)]
+def battle(games, is_hard):
+    min_mana = 10**18
+    while games:
+        if games[0][TURN] % 2 == 0:
+            next_games = [next for game in games for next in player_turn(game)]
         else:
-            next_states = [
-                next for state in states if (next := boss_turn(state, is_hard))
-            ]
+            next_games = [next for game in games if (next := boss_turn(game, is_hard))]
 
-        states = []
-        for next in next_states:
-            if next[MANA_SPENT] < best_cost:
+        games = []
+        for next in next_games:
+            if next[MANA_SPENT] < min_mana:
                 apply_effects(next)
                 if next[B_HP] <= 0:
-                    best_cost = next[MANA_SPENT]
+                    min_mana = next[MANA_SPENT]
                 else:
-                    states.append(next)
-    return best_cost
+                    games.append(next)
+        games = sorted(games, key=lambda game: game[B_HP])[:1024]
+
+    return min_mana
 
 
 def part1(data):
@@ -126,18 +140,19 @@ def part1(data):
     # mana = 250
     # b_hp, b_dmg = 14, 8
 
-    initial = initial_state(p_hp, mana, b_hp, b_dmg)
+    game = initial_game(p_hp, mana, b_hp, b_dmg)
 
-    return battle([initial], False)
+    return battle([game], False)
 
 
 def part2(data, ans1=None):
     p_hp = 50
     mana = 500
     b_hp, b_dmg = data
-    initial = initial_state(p_hp, mana, b_hp, b_dmg)
 
-    return battle([initial], True)
+    game = initial_game(p_hp, mana, b_hp, b_dmg)
+
+    return battle([game], True)
 
 
 def jingle(filename=None, filepath=None, text=None):
