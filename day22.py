@@ -87,28 +87,24 @@ def player_turn(state):
     return (spelled for spell in spells if (spelled := spell(list(state))))
 
 
-def boss_turn(state):
+def boss_turn(state, is_hard):
     state[TURN] += 1
     damage = max(1, state[B_DMG] - state[P_ARM])
+    if is_hard:
+        damage = damage + 1
     state[P_HP] -= damage
     return state if state[P_HP] > 0 else None
 
 
-def battle(states):
+def battle(states, is_hard):
     best_cost = 10**18
     while states:
-        # print(f"-- {"Player" if states[0][TURN] % 2 == 0 else "Boss"} --")
-        # for state in states:
-        #     print(f"Player has {state[P_HP]} hit points, {state[P_ARM]} armor, {state[MANA]} mana")
-        #     print(f"Boss has {state[B_HP]} hit points")
-        #     print(state)
-        #     print()
-        # print()
-        # print("len:", len(states))
         if states[0][TURN] % 2 == 0:
             next_states = [next for state in states for next in player_turn(state)]
         else:
-            next_states = [next for state in states if (next := boss_turn(state))]
+            next_states = [
+                next for state in states if (next := boss_turn(state, is_hard))
+            ]
 
         states = []
         for next in next_states:
@@ -131,11 +127,17 @@ def part1(data):
     # b_hp, b_dmg = 14, 8
 
     initial = initial_state(p_hp, mana, b_hp, b_dmg)
-    return battle([initial])
+
+    return battle([initial], False)
 
 
 def part2(data, ans1=None):
-    return "ans2"
+    p_hp = 50
+    mana = 500
+    b_hp, b_dmg = data
+    initial = initial_state(p_hp, mana, b_hp, b_dmg)
+
+    return battle([initial], True)
 
 
 def jingle(filename=None, filepath=None, text=None):
