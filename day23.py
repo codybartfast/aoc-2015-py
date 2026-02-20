@@ -19,8 +19,7 @@ def parse(text):
     return [parse_line(line) for line in text.splitlines()]
 
 
-def run(program):
-    regs = [0] * 3
+def run(regs, program):
     while regs[REG_PC] < len(program):
         instr = program[regs[REG_PC]]
         match instr:
@@ -47,15 +46,18 @@ def run(program):
                     regs[REG_PC] += 1
             case _:
                 raise RuntimeError(f"oops {instr}")
-    return regs
                 
 
 def part1(program):
-    return run(program)[REG_B]
+    regs = [0] * 3
+    run(regs, program)
+    return regs[REG_B]
 
 
 def part2(program, ans1=None):
-    return "ans2"
+    regs = [0, 1, 0]
+    run(regs, program)
+    return regs[REG_B]
 
 
 def jingle(filename=None, filepath=None, text=None):
