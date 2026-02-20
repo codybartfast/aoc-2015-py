@@ -1,3 +1,17 @@
+#  Day 23
+#  ======
+#
+#  Part 1: 170
+#  Part 2: 247
+#
+#  Timings
+#  ---------------------
+#    Parse:     0.000021
+#   Part 1:     0.000142
+#   Part 2:     0.000193
+#  Elapsed:     0.000396
+
+
 REG_PC = 0
 REG_A = 1
 REG_B = 2
@@ -46,18 +60,15 @@ def run(regs, program):
                     regs[REG_PC] += 1
             case _:
                 raise RuntimeError(f"oops {instr}")
-                
+    return regs
+
 
 def part1(program):
-    regs = [0] * 3
-    run(regs, program)
-    return regs[REG_B]
+    return run([0, 0, 0], program)[REG_B]
 
 
 def part2(program, ans1=None):
-    regs = [0, 1, 0]
-    run(regs, program)
-    return regs[REG_B]
+    return run([0, 1, 0], program)[REG_B]
 
 
 def jingle(filename=None, filepath=None, text=None):
