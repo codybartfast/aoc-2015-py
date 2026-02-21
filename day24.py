@@ -1,3 +1,16 @@
+#  Day 24
+#  ======
+#
+#  Part 1: 11846773891
+#  Part 2: 80393059
+#
+#  Timings
+#  ---------------------
+#    Parse:     0.000007
+#   Part 1:     0.172239
+#   Part 2:     0.007699
+#  Elapsed:     0.179995
+
 def parse(text):
     return tuple(sorted((int(line) for line in text.splitlines()), reverse=True))
 
@@ -23,8 +36,7 @@ def mul(values):
 
 
 def find_balance(packages, split):
-    full_load = sum(packages)
-    target = full_load / split
+    target = sum(packages) / split
     max_pick_lst = [10**8]
 
     picks = [
