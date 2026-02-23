@@ -2,7 +2,7 @@
 #  ======
 #
 #  Part 1: 8997277
-#  Part 2: Meryy Christmas
+#  Part 2: Merry Christmas
 #
 #  Timings
 #  ---------------------
@@ -30,7 +30,7 @@ def part1(cell):
 
 
 def part2(data, ans1=None):
-    return "Meryy Christmas"
+    return "Merry Christmas"
 
 
 def jingle(filename=None, filepath=None, text=None):
