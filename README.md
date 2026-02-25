@@ -6,4 +6,4 @@ Launched in 2026, this is my second Advent 2015 campaign.
 
 
 [Primary Source](https://git.sr.ht/~codybartfast/aoc-2015-py)  
-[Other Events](https://sr.ht/~codybartfast/aoc/sources)
+[Other Campaigns](https://sr.ht/~codybartfast/aoc/sources)
