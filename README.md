@@ -1,6 +1,6 @@
 # Advent of Code 2015 in Python
 
-[Advent of Code 2015](https://adventofcode.com/2015) using Python
+Helping Santa to let it snow in the one and only [Advent of Code 2015](https://adventofcode.com/2015)
 
 Launched in 2026, this is my second Advent 2015 campaign.
 
